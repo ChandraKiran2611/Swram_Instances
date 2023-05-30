@@ -13,11 +13,8 @@ func InitializeDirectory() error {
 	}
 
 	ipfsPath = fmt.Sprintf("%s/%s",usr.HomeDir,ReadFileName())
-	err = ExceCmd(cmd,"init")
-	if err!=nil{
-		return err
-	}
-	return nil
+	return ExceCmd(cmd,"init")
+	
 }
 
 func ConfigurePorts() error {
