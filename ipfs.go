@@ -26,39 +26,41 @@ const (
 )
 
 
-func ExceCmd(cmd string , args ...string) (error) {
+func ExceCmd(cmd string , args ...string) error {
 	command :=	exec.Command(cmd,args...)
 	command.Env = append(command.Env,envPath+ipfsPath)
-	fmt.Println("path>>> ",ipfsPath)
-	if err:= command.Run();err != nil{
-		return err
-	}
-	return nil
+
+	return command.Run()
+	
 }
 
-func Read(port string) (string) {
+func Read(port string) string {
 	 fmt.Scan(&port)
+
 	 return port
 }
 
-func ReadPort() (string) {
+func ReadPort() string {
 	fmt.Println("Enter the API/Gatway Port : ")
-	return Read(port)
 
+	return Read(port)
 }
 
-func ReadFileName() (string){
+func ReadFileName() string {
 	fmt.Println("Enter the fileName  : ")
+	
 	return Read(fileName)
 }
 
-func CheckPorts() (string) {
+func CheckPorts() string {
 	maAddr,_ := ma.NewMultiaddr(muladdr+ReadPort())
 	_,err:= manet.Listen(maAddr)
 	if err!=nil{
 		os.RemoveAll(ipfsPath)
 		return ""
 	}
+
 	addr:= fmt.Sprintf("%s",maAddr)
-		return addr
+
+	return addr
 }
