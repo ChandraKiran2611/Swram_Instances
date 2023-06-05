@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"os/exec"
+
 	ma "github.com/multiformats/go-multiaddr"
 	manet "github.com/multiformats/go-multiaddr/net"
-	"os"
-	
 )
 
 var (
@@ -31,33 +32,17 @@ func ExceCmd(cmd string , args ...string) error {
 	command.Env = append(command.Env,envPath+ipfsPath)
 
 	return command.Run()
-	
 }
 
-func Read(port string) string {
-	 fmt.Scan(&port)
 
-	 return port
-}
 
-func ReadPort() string {
-	fmt.Println("Enter the API/Gatway Port : ")
-
-	return Read(port)
-}
-
-func ReadFileName() string {
-	fmt.Println("Enter the fileName  : ")
-	
-	return Read(fileName)
-}
-
-func CheckPorts() string {
-	maAddr,_ := ma.NewMultiaddr(muladdr+ReadPort())
+func CheckPorts(port string) string {
+	maAddr,_ := ma.NewMultiaddr(muladdr+port)
 	_,err:= manet.Listen(maAddr)
 	if err!=nil{
 		os.RemoveAll(ipfsPath)
-		return ""
+		log.Fatalf("Daemon is not Running, The Port is already in use")
+		os.Exit(1)
 	}
 
 	addr:= fmt.Sprintf("%s",maAddr)
