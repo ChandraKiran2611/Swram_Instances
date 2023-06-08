@@ -27,17 +27,35 @@ const (
 )
 
 
-func ExceCmd(cmd string , args ...string) error {
+func ExceCmd( ipfsCMd string,args ...string) error {
 	command :=	exec.Command(cmd,args...)
 	command.Env = append(command.Env,envPath+ipfsPath)
 
 	return command.Run()
 }
 
+func Read(portNum string) string {
+	fmt.Scan(&port)
+
+	return port
+}
+
+func ReadPort() string {
+   fmt.Println("Enter the API/Gatway Port : ")
+
+   return Read(port)
+}
+
+func ReadFileName() string {
+   fmt.Println("Enter the fileName  : ")
+
+   return Read(fileName)
+}
 
 
-func CheckPorts(port string) string {
-	maAddr,_ := ma.NewMultiaddr(muladdr+port)
+
+func CheckPorts() string {
+	maAddr,_ := ma.NewMultiaddr(muladdr+ReadPort())
 	_,err:= manet.Listen(maAddr)
 	if err!=nil{
 		os.RemoveAll(ipfsPath)

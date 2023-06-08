@@ -7,33 +7,36 @@ import (
 	"os/user"
 )
 
-func InitializeDirectory(filename string) error {
+func InitializeDirectory() error {
 	usr,err := user.Current()
 	if err!=nil{
 		return err
 	}
 
-	fmt.Println("file:",filename)
-	ipfsPath = fmt.Sprintf("%s/%s",usr.HomeDir,filename)
+	//for windows '\' needed to be used. Remaining can be done with "/"
+	ipfsPath = fmt.Sprintf("%s\\%s",usr.HomeDir,ReadFileName())
 
 	_,err = os.Stat(ipfsPath)
 	if err==nil{
-		StartDaemon()
-		os.Exit(0)
+		if err:=os.RemoveAll(ipfsPath);err!=nil{
+			return err
+		}
+		
+		if err:=ConfigurePorts();err!=nil{
+			return err
+		}
 	}
 
 	fmt.Println("filePAth:",ipfsPath)
 	return ExceCmd(cmd,"init")
 }
 
-func ConfigurePorts(apiport,gatewayport string) error {
-	fmt.Println("api:",apiport)
-	fmt.Println("gate:",gatewayport)
-	if err:= ExceCmd(cmd,config,apiaddr,CheckPorts(apiport));err!=nil{ 
+func ConfigurePorts() error {
+	
+	if err:= ExceCmd(cmd,config,apiaddr,CheckPorts());err!=nil{ 
 		return err
 	}
-
-	return ExceCmd(cmd,config,gateaddr,CheckPorts(gatewayport)) 
+	return ExceCmd(cmd,config,gateaddr,CheckPorts()) 
 }
 
 func StartDaemon() error {
