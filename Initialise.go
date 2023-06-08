@@ -27,7 +27,6 @@ func InitializeDirectory() error {
 		}
 	}
 
-	fmt.Println("filePAth:",ipfsPath)
 	return ExceCmd(cmd,"init")
 }
 
